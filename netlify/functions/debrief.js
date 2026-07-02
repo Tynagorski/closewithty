@@ -43,26 +43,50 @@ async function fetchRates() {
   };
 }
 
-// ── Real estate news via RSS2JSON ────────────────────────────
+// ── Real estate news, parsed directly from Google News RSS ───
+// (Previously proxied through rss2json.com, which unreliably fails
+// to fetch Google News' feed — fetching and parsing the XML
+// ourselves removes that point of failure entirely.)
 async function fetchNews() {
   const rssUrl = process.env.NEWS_RSS_URL ||
-    'https://feeds.feedburner.com/entrepreneur/latest';
+    'https://news.google.com/rss/search?q=mortgage+real+estate+rates+housing&hl=en-US&gl=US&ceid=US:en';
 
-  // Use RSS2JSON public API (free, no key needed for basic use)
-  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(
-    'https://news.google.com/rss/search?q=mortgage+real+estate+rates+housing&hl=en-US&gl=US&ceid=US:en'
-  )}&count=4`;
+  const res = await fetch(rssUrl, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CloseWithTyBot/1.0; +https://closewithty.com)' }
+  });
+  if (!res.ok) return [];
 
-  const res  = await fetch(apiUrl);
-  const data = await res.json();
-  if (data.status !== 'ok' || !data.items?.length) return [];
+  const xml = await res.text();
+  const items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
 
-  return data.items.slice(0, 4).map(item => ({
-    title:  item.title.replace(/ - [^-]+$/, ''), // strip source from title
-    link:   item.link,
-    source: item.author || extractDomain(item.link),
-    date:   formatDate(item.pubDate)
-  }));
+  return items.slice(0, 4).map(block => {
+    const rawTitle = extractTag(block, 'title');
+    const link = extractTag(block, 'link');
+    const sourceMatch = block.match(/<source[^>]*>([^<]*)<\/source>/);
+    const source = sourceMatch ? decodeEntities(sourceMatch[1]) : extractDomain(link);
+    return {
+      title: decodeEntities(rawTitle).replace(/ - [^-]+$/, ''), // strip trailing " - Source" from title
+      link,
+      source,
+      date: formatDate(extractTag(block, 'pubDate'))
+    };
+  }).filter(item => item.title && item.link);
+}
+
+function extractTag(block, tag) {
+  const m = block.match(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`));
+  if (!m) return '';
+  return m[1].replace(/^<!\[CDATA\[/, '').replace(/\]\]>$/, '').trim();
+}
+
+function decodeEntities(str) {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
 }
 
 function extractDomain(url) {

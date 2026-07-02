@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /internal/
+
+Sitemap: https://closewithty.com/sitemap.xml
