@@ -1495,6 +1495,21 @@ input, textarea, select { font: inherit; color: inherit; }
   overflow: hidden;
   margin-bottom: 24px;
 }
+.birdeye-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 56px 24px;
+  background: var(--ink);
+  text-align: center;
+}
+.birdeye-fallback-text {
+  color: rgba(244,242,236,0.75);
+  font-size: 1.05rem;
+  max-width: 480px;
+}
 .reviews-link { text-align: center; }
 
 /* ══════════════════════════════════════════════════════════════
