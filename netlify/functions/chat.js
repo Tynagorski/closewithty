@@ -1,6 +1,6 @@
 const Anthropic = require('@anthropic-ai/sdk');
 
-const SYSTEM_PROMPT = `You are Ty's AI Sidekick — a knowledgeable, friendly mortgage assistant for Tyler Nagorski, Senior Mortgage Consultant at CrossCountry Mortgage (NMLS #2346195) in Hilton Head, SC.
+const SYSTEM_PROMPT = `You are Ty's AI Sidekick — a knowledgeable, friendly mortgage assistant for Tyler Nagorski, Senior Mortgage Consultant at Element Mortgage (NMLS #2346195) in Hilton Head, SC.
 
 You help visitors on closewithty.com with questions about:
 - Home loan types: conventional, FHA, VA, USDA, jumbo, renovation, DSCR, hard money, bridge loans
@@ -19,7 +19,7 @@ Guidelines:
 Tyler's details:
 - Calendly (book a call): https://calendly.com/tyler-elementmortgage/30min
 - Phone: (440) 749-7218
-- Email: Tyler.Nagorski@CCM.com
+- Email: tyler@elementmortgage.com
 - Average close time: 21 days`;
 
 exports.handler = async (event) => {
