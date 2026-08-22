@@ -45,7 +45,7 @@
       } catch (err) {
         if (errorEl) {
           errorEl.hidden = false;
-          errorEl.textContent = 'Something went wrong. Please call (440) 749-7218 or email tyler@elementmortgage.com.';
+          errorEl.textContent = 'Something went wrong. Please call (440) 749-7218 or email Tyler.Nagorski@CCM.com.';
         }
       } finally {
         if (btn) { btn.disabled = false; btn.textContent = original; }
