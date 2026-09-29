@@ -314,27 +314,49 @@
     quoteEl.textContent  = `"${q}"`;
     authorEl.textContent = `— ${a}`;
 
-    // Rates + news from Netlify function
+    // Rates + news from the Netlify function.
+    //
+    // One render path for all three outcomes, because the previous split had a
+    // hole in it: the fallback lived only in .catch(), and the function returns
+    // HTTP 200 with {rate30: null, news: []} when FRED_API_KEY is unset or the
+    // feed comes back empty. Nothing throws, so nothing was caught, so the
+    // placeholders stayed on screen — a permanent em-dash under "30-Yr Fixed"
+    // and a "Loading headlines…" that never stopped loading.
+    //
+    // Succeeding with no data is the common case here, not the exceptional one,
+    // and it has to render as deliberately as success with data does.
+    const setRates = (r30, r15) => {
+      [[r30El, r30], [r15El, r15]].forEach(([el, val]) => {
+        if (!el) return;
+        if (val) {
+          el.textContent = val + '%';
+          el.classList.remove('rate-val--text');
+        } else {
+          // A dead field becomes the call it was always trying to prompt.
+          el.innerHTML = '<a href="tel:+14407497218">Call for today\'s rate</a>';
+          el.classList.add('rate-val--text');
+        }
+      });
+    };
+
+    const setNews = (items) => {
+      if (!newsEl) return;
+      if (items && items.length) {
+        newsEl.innerHTML = items.map(item =>
+          `<li><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+            <span class="news-source">${item.source} · ${item.date}</span>
+          </li>`
+        ).join('');
+      } else {
+        newsEl.innerHTML = '<li>Headlines are taking a moment — call (440)&nbsp;749-7218 '
+          + 'and Tyler will tell you what the market actually did this week.</li>';
+      }
+    };
+
     fetch('/.netlify/functions/debrief')
       .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data) return;
-        if (data.rate30) r30El.textContent = data.rate30 + '%';
-        if (data.rate15) r15El.textContent = data.rate15 + '%';
-        if (data.news && data.news.length) {
-          newsEl.innerHTML = data.news.map(item =>
-            `<li><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
-              <span class="news-source">${item.source} · ${item.date}</span>
-            </li>`
-          ).join('');
-        }
-      })
-      .catch(() => {
-        // Rates fail silently; contact CTA is shown in the rate card
-        r30El.textContent = 'Call for rate';
-        r15El.textContent = 'Call for rate';
-        newsEl.innerHTML = '<li>News temporarily unavailable — check back shortly.</li>';
-      });
+      .then(data => { setRates(data && data.rate30, data && data.rate15); setNews(data && data.news); })
+      .catch(() => { setRates(null, null); setNews(null); });
   })();
 
 })();
