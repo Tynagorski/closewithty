@@ -527,21 +527,31 @@
         <h2 id="reviews-heading">What Clients Are Saying</h2>
         <p class="section-sub">Real reviews from real clients — verified on Experience.com.</p>
       </div>
-      <!-- Reviews live on Experience.com, which is where CrossCountry collects
-           them. This links to the real profile rather than restating anything:
-           no review text, star rating or count is duplicated here, because
-           whatever is hard-coded goes stale the moment a new review lands and
-           an aggregateRating that is not backed by reviews visible on this page
-           is exactly what Google penalises.
+      <!-- Experience.com's widget, pasted as they issue it. Deliberately not
+           rewritten: no async or defer added, no attributes reordered. A vendor
+           script that is edited to look tidier is a script that breaks on their
+           next release and takes the reviews down with it.
 
-           TO RENDER REVIEWS INLINE: paste the embed snippet from the
-           Experience.com dashboard in place of the block below, then add an
-           aggregateRating to the FinancialService schema in <head> so the
-           stars can show in search results. -->
-      <div class="reviews-embed reviews-embed-cta">
-        <p class="reviews-embed-text">Verified client reviews are hosted on Experience.com — read them straight from the source.</p>
-        <a href="https://www.experience.com/reviews/tyler-nagorski-470215" target="_blank" rel="noopener" class="btn-primary">Read Verified Reviews →</a>
+           The keys here are publishable by design — this widget only ever runs
+           in a browser on a public page, so both are meant to be readable in
+           the page source. Neither is an account credential. -->
+      <div class="reviews-embed">
+        <div id='ss-custom-reviews-widget-root'></div>
+        <script
+        id='ss-custom-reviews-widget-script'
+        src='https://widget.experience.com/custom_reviews_widget_script.js'
+        ss-custom-reviews-widget-api-key='MfSjajQa94r5el__rGocJBkm8u46tlxDQOKeekcG-cJWI92ZgnfMMex8aMFw628JrizJWTuL4lRjXQf7'
+        widget-key='8e0LzvItD43s6eJph6TfSw'
+        type='text/javascript'>
+        </script>
       </div>
+
+      <!-- Kept below the widget rather than replaced by it. An ad blocker or a
+           bad day at the vendor leaves the widget empty, and an empty Social
+           Proof section is worse than a link. -->
+      <p class="reviews-link">
+        <a href="https://www.experience.com/reviews/tyler-nagorski-470215" target="_blank" rel="noopener">Read every review on Experience.com →</a>
+      </p>
     </div>
   </section>
 
