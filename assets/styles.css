@@ -994,7 +994,7 @@ input, textarea, select { font: inherit; color: inherit; }
 .hero-v2-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 120px var(--gutter-d) 96px;
+  padding: 120px var(--gutter-d) 36px;
 }
 .hero-v2-eyebrow {
   display: flex;
@@ -1083,7 +1083,7 @@ input, textarea, select { font: inherit; color: inherit; }
 .hero-v2-meta a:hover { color: var(--paper); }
 
 @media (max-width: 768px) {
-  .hero-v2-inner { padding: 80px var(--gutter-m) 64px; }
+  .hero-v2-inner { padding: 80px var(--gutter-m) 28px; }
   .hero-v2-stats { gap: 28px; }
   .hero-v2-ctas { flex-direction: column; }
   .hero-v2-ctas .btn-primary,
@@ -1098,7 +1098,10 @@ input, textarea, select { font: inherit; color: inherit; }
   color: var(--paper);
   border-bottom: 1px solid rgba(255, 255, 255,0.1);
 }
-.debrief .section-inner { padding-top: 0; padding-bottom: 72px; }
+/* Split either side of the divider rather than piling it all above.
+   The hero and the debrief share a background, so an unbalanced 96/0
+   reads as dead space above the rule and a cramped label below it. */
+.debrief .section-inner { padding-top: 28px; padding-bottom: 72px; }
 .debrief-label {
   display: flex;
   align-items: center;
