@@ -1184,6 +1184,18 @@ input, textarea, select { font: inherit; color: inherit; }
 .rate-val--text a { color: var(--accent-on-dark); text-decoration: none; border-bottom: 1px solid currentColor; }
 .rate-val--text a:hover { color: var(--paper); }
 
+/* The survey week the rates came from. Held at 0.55 alpha rather than the
+   0.3 the disclaimer below it uses — this one is information a visitor is
+   meant to read, not fine print. On #2C2829 that clears 4.5:1. */
+.debrief-rate-asof {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 8px;
+}
+.debrief-rate-asof[hidden] { display: none; }
 .debrief-rate-note {
   font-size: 0.75rem;
   color: rgba(255, 255, 255,0.3);

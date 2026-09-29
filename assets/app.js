@@ -306,6 +306,7 @@
     const newsEl   = document.getElementById('debrief-news');
     const r30El    = document.getElementById('rate-30');
     const r15El    = document.getElementById('rate-15');
+    const rDateEl  = document.getElementById('rate-asof');
     if (!quoteEl) return;
 
     // Daily quote (changes daily, deterministic)
@@ -325,7 +326,19 @@
     //
     // Succeeding with no data is the common case here, not the exceptional one,
     // and it has to render as deliberately as success with data does.
-    const setRates = (r30, r15) => {
+    const setRates = (r30, r15, rDate) => {
+      // PMMS is a weekly survey. Without the week on screen a visitor cannot
+      // tell a current number from a stale one, so the date only appears when
+      // there is a rate to date — never on its own, and never guessed.
+      if (rDateEl) {
+        if (r30 && rDate) {
+          rDateEl.textContent = 'Week of ' + rDate;
+          rDateEl.hidden = false;
+        } else {
+          rDateEl.textContent = '';
+          rDateEl.hidden = true;
+        }
+      }
       [[r30El, r30], [r15El, r15]].forEach(([el, val]) => {
         if (!el) return;
         if (val) {
@@ -355,8 +368,11 @@
 
     fetch('/.netlify/functions/debrief')
       .then(r => r.ok ? r.json() : null)
-      .then(data => { setRates(data && data.rate30, data && data.rate15); setNews(data && data.news); })
-      .catch(() => { setRates(null, null); setNews(null); });
+      .then(data => {
+        setRates(data && data.rate30, data && data.rate15, data && data.rateDate);
+        setNews(data && data.news);
+      })
+      .catch(() => { setRates(null, null, null); setNews(null); });
   })();
 
 })();
