@@ -442,8 +442,10 @@ input, textarea, select { font: inherit; color: inherit; }
 
 /* On the dark hero the default ink-on-ink ghost button is invisible —
    invert it so it reads against --ink. */
-.hero-v2 .btn-ghost { color: var(--paper); border-color: rgba(255, 255, 255, 0.45); }
-.hero-v2 .btn-ghost:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.hero-v2 .btn-ghost,
+.page-hero .btn-ghost { color: var(--paper); border-color: rgba(255, 255, 255, 0.45); }
+.hero-v2 .btn-ghost:hover,
+.page-hero .btn-ghost:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
 
 /* Decorative grid lines (subtle) */
 .hero-rules {
