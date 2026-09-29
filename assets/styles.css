@@ -1513,14 +1513,14 @@ input, textarea, select { font: inherit; color: inherit; }
    REVIEWS
    ══════════════════════════════════════════════════════════════ */
 .reviews { background: var(--paper); }
-.birdeye-wrap {
+.reviews-embed {
   min-height: 300px;
   border: var(--rule);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 24px;
 }
-.birdeye-fallback {
+.reviews-embed-cta {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1530,7 +1530,7 @@ input, textarea, select { font: inherit; color: inherit; }
   background: var(--ink);
   text-align: center;
 }
-.birdeye-fallback-text {
+.reviews-embed-text {
   color: rgba(255, 255, 255,0.75);
   font-size: 1.05rem;
   max-width: 480px;
